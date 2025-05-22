@@ -28,6 +28,7 @@ class EjemploProyectoController extends Controller
     public function create()
     {
         //
+        return view("projectsVista/new");
     }
 
     /**
@@ -36,6 +37,9 @@ class EjemploProyectoController extends Controller
     public function store(Request $request)
     {
         //
+        EjemploProyecto::create($request->all());
+        return redirect('project/')
+            ->with('success', 'Proyecto creado correctamente');
     }
 
     /**
@@ -52,6 +56,8 @@ class EjemploProyectoController extends Controller
     public function edit(Proyectos $proyectos)
     {
         //
+        $proyecto=Proyecto::find($id);
+        return view("projects/update", compact('proyecto'));
     }
 
     /**
