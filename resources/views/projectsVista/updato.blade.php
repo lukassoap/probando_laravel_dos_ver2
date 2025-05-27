@@ -66,17 +66,21 @@
                 </ul>
             </div>
             <div class="col-9">
-                <p class="fs-1">Registro de Proyectos</p>
-                <form action="{{route('project.store')}}" method="post">
+                <p class="fs-1">Actualización de Proyectos</p>
+                <form action="{{route('project.update', $proyecto->id)}}" method="post">
                     @csrf
-                    @method('POST')
+                    @method('PUT')
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="inputGroup-sizing-default">Id</span>
+                        <input type="text" name="id" id="id" class="form-control" value="{{$proyecto->id}}" arial-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+                    </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="inputGroup-sizing-default">Título</span>
-                        <input type="text" name="titulo" id="titulo" class="form-control" arial-label="Sizing example input">
+                        <input type="text" name="titulo" id="titulo" value="{{$proyecto->titulo}}" class="form-control" arial-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
                     </div>
                     <div class="input-group">
                         <span class="input-group-text">Descripción</span>
-                        <textarea name="descripcion" id="descripcion" class="form-control" arial-label="With textarea"></textarea>
+                        <textarea name="descripcion" id="descripcion" class="form-control" arial-label="With textarea">{{$proyecto->descripcion}}</textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Guardar</button>
                 </form>
@@ -90,19 +94,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class EjemploProyecto extends Model
 {
     //
-    use HasFactory;
+    //use HasFactory;
     protected $fillable = [
         'titulo',
         'descripcion',

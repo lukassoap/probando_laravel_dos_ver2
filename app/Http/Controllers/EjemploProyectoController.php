@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Proyectos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\EjemploProyecto; // Asegúrate de importar el modelo correcto
+
 
 class EjemploProyectoController extends Controller
 {
@@ -37,7 +39,7 @@ class EjemploProyectoController extends Controller
     public function store(Request $request)
     {
         //
-        EjemploProyecto::create($request->all());
+        EjemploProyecto::create($request->all()); //testing if it works
         return redirect('project/')
             ->with('success', 'Proyecto creado correctamente');
     }
@@ -53,26 +55,39 @@ class EjemploProyectoController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Proyectos $proyectos)
+    public function edit($id)
     {
-        //
-        $proyecto=Proyecto::find($id);
-        return view("projects/update", compact('proyecto'));
+    $proyecto = EjemploProyecto::find($id);
+    return view("projectsVista/update", compact('proyecto'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Proyectos $proyectos)
+    public function update(Request $request, $id)
     {
         //
+        $request->validate([
+            'titulo' => 'required|max:255',
+            'descripcion' => 'required',
+        ]);
+        $proyecto = EjemploProyecto::find($id);
+        $proyecto->update($request->all());
+        return redirect('project/')
+            ->with('success', 'Proyecto actualizado correctamente');
+
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Proyectos $proyectos)
+    public function destroy($id)
     {
-        //
+        $proyecto = EjemploProyecto::findOrFail($id);
+        $proyecto->delete();
+        
+        return redirect('project/')
+            ->with('success', 'Proyecto eliminado correctamente');
     }
+
 }

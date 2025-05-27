@@ -1,109 +1,73 @@
-
-
 <!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap demo</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    </head>
-    <body>
-    <div class="container text-center">
-        <div class="row">
-            <div class="col">
-                <nav class="navbar navbar-expand-lg bg-body-tertiary">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">Navbar</a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Home</a>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                            </li>
-                            <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Dropdown
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">Another action</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">Something else here</a></li>
-                            </ul>
-                            </li>
-                            <li class="nav-item">
-                            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                            </li>
-                        </ul>
-                        <form class="d-flex" role="search">
-                            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                            <button class="btn btn-outline-success" type="submit">Search</button>
-                        </form>
-                        </div>
-                    </div>
-                </nav>
-            </div>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Listado de Proyectos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Gestor de Proyectos</a>
+            <button class="navbar-toggler" type="button" da-ta-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
-        <div class="row">
-            <div class="col-3">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Active</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-9">
-                <p class="fs-1">Listado de Proyectos</p>
-                <table class="table">
-                    <thead> <!--datos de cabecera -->
-                        <tr> <!-- fila -->
-                        <th scope="col">id</th> <!--columna de la fila -->
-                        <th scope="col">Título</th>
-                        <th scope="col">Descripción</th>
-                        <th scope="col">Fecha de creación</th>
+    </nav>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="h3">Listado de Proyectos</h1>
+            <a class="btn btn-primary" href="{{ url('/project/create') }}">Nuevo Proyecto</a>
+        </div>
+
+        @if(session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
+
+        <div class="card shadow">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Descripción</th>
+                            <th>Creado</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        </tr> -->
-                        @foreach($proyectos as $proyecto)
-                        <tr>
-                            <th scope="row">{{$proyecto->id}}</th>
-                            <th>{{$proyecto->titulo}}</th>
-                            <th>{{$proyecto->descripcion}}</th>
-                            <th>{{$proyecto->created_at}}</th>
-                        </tr>
-                @endforeach
+                        @forelse($proyectos as $proyecto)
+                            <tr>
+                                <td>{{ $proyecto->id }}</td>
+                                <td>{{ $proyecto->titulo }}</td>
+                                <td>{{ $proyecto->descripcion }}</td>
+                                <td>{{ \Carbon\Carbon::parse($proyecto->created_at)->format('d/m/Y') }}</td>
+                                <td>
+                                    <a href="{{ url('/project/' . $proyecto->id . '/edit') }}" class="btn btn-sm btn-warning">Editar</a>
+
+                                    <form action="{{ url('/project/' . $proyecto->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este proyecto?')">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center">No hay proyectos registrados.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
         </div>
-        <a class="btn btn-primary" href="http://127.0.0.1:8000/project/create" role="button">Guardar un proyecto</a>
-        <div class="row">
-            <div class="col">
-                <footer>Hecho por Jose Ruiz (poniendome al dia gracias a Judith)</footer>
-            </div>
-        </div>
+
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

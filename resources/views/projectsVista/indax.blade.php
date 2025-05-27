@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
     <head>
@@ -66,22 +67,39 @@
                 </ul>
             </div>
             <div class="col-9">
-                <p class="fs-1">Registro de Proyectos</p>
-                <form action="{{route('project.store')}}" method="post">
-                    @csrf
-                    @method('POST')
-                    <div class="input-group mb-3">
-                        <span class="input-group-text" id="inputGroup-sizing-default">Título</span>
-                        <input type="text" name="titulo" id="titulo" class="form-control" arial-label="Sizing example input">
-                    </div>
-                    <div class="input-group">
-                        <span class="input-group-text">Descripción</span>
-                        <textarea name="descripcion" id="descripcion" class="form-control" arial-label="With textarea"></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
-                </form>
+                <p class="fs-1">Listado de Proyectos</p>
+                <table class="table">
+                    <thead>
+    <tr>
+        <th scope="col">id</th>
+        <th scope="col">Título</th>
+        <th scope="col">Descripción</th>
+        <th scope="col">Fecha de creación</th>
+        <th scope="col">Acciones</th> <!-- NUEVA COLUMNA -->
+    </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($proyectos as $proyecto)
+                            <tr>
+                                <th scope="row">{{$proyecto->id}}</th>
+                                <td>{{$proyecto->titulo}}</td>
+                                <td>{{$proyecto->descripcion}}</td>
+                                <td>{{$proyecto->created_at}}</td>
+                                <td>
+                                    <!-- Formulario para eliminar -->
+                                    <form action="{{ url('/project/'.$proyecto->id) }}" method="POST" style="display:inline-block;">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?')">Eliminar</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                </table>
             </div>
         </div>
+        <a class="btn btn-primary" href="http://127.0.0.1:8000/project/create" role="button">Guardar un proyecto</a>
         <div class="row">
             <div class="col">
             </div>
@@ -90,19 +108,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                    
